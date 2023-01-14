@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense;
+using System.Numerics;
 using System.Reflection.Emit;
 
 namespace Api.Controllers
@@ -17,7 +19,7 @@ namespace Api.Controllers
         }
 
         [HttpPost()]
-        public Player CreatePlayer(string uname, string fname, string lname)
+        public PlayerDto CreatePlayer(string uname, string fname, string lname)
         {
             Player player = new Player();
             player.FirstName = fname;
@@ -26,18 +28,18 @@ namespace Api.Controllers
             player.Id = apiContext.Players.Count() + 1;
             apiContext.Players.Add(player);
             apiContext.SaveChanges();
-            return player;
+            return new PlayerDto(player);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Player> GetPlayer(int id)
+        public ActionResult<PlayerDto> GetPlayer(int id)
         {
             Player? player = apiContext.Players.SingleOrDefault(p => p.Id == id);
             if (player == null)
             {
                 return NotFound("Player with id " + id + " not found!");
             }
-            return player;
+            return new PlayerDto(player);
         }
 
         [HttpPut("{id}")]
@@ -69,9 +71,9 @@ namespace Api.Controllers
         }
 
         [HttpGet()]
-        public ActionResult<List<Player>> GetAllPlayers()
+        public ActionResult<List<PlayerDto>> GetAllPlayers()
         {
-            return apiContext.Players.ToList();
+            return apiContext.Players.Select(p => new PlayerDto(p)).ToList();
         }
     }
 }
