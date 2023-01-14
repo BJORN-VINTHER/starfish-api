@@ -3,7 +3,7 @@ name: Bug report
 about: Used to report bugs in the system
 title: ''
 labels: bug
-assignees: ''
+assignees: sm1rt19
 
 ---
 

@@ -3,7 +3,7 @@ name: ChatRoom template
 about: For issues related to the ChatRoom
 title: ''
 labels: chat-room
-assignees: ''
+assignees: sm1rt19
 
 ---
 
