@@ -1,7 +1,7 @@
 ---
 name: ChatRoom template
 about: For issues related to the ChatRoom
-title: "[ChatRoom]"
+title: ''
 labels: chat-room
 assignees: ''
 
