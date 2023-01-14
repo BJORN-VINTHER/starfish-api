@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Persistense;
 using System.Reflection.Emit;
 
 namespace Api.Controllers
@@ -8,21 +9,12 @@ namespace Api.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
-        private static List<Player> players = new List<Player>() {
-            new Player
-            {
-                UserName = "Hansemand",
-                FirstName = "Hans",
-                LastName = "Jensen",
-                Id = 10,
-            },
-            new Player
-            {
-                UserName = "Jensemand",
-                FirstName = "Jens",
-                LastName = "Hansen",
-                Id = 20,
-            }};
+        private readonly ApiContext apiContext;
+
+        public PlayersController(ApiContext apiContext)
+        {
+            this.apiContext = apiContext;
+        }
 
         [HttpPost()]
         public Player CreatePlayer(string uname, string fname, string lname)
@@ -31,15 +23,16 @@ namespace Api.Controllers
             player.FirstName = fname;
             player.LastName = lname;
             player.UserName = uname;
-            player.Id = players.Count + 1;
-            players.Add(player);
+            player.Id = apiContext.Players.Count() + 1;
+            apiContext.Players.Add(player);
+            apiContext.SaveChanges();
             return player;
         }
 
         [HttpGet("{id}")]
         public ActionResult<Player> GetPlayer(int id)
         {
-            Player player = players.Find(p => p.Id == id);
+            Player? player = apiContext.Players.SingleOrDefault(p => p.Id == id);
             if (player == null)
             {
                 return NotFound("Player with id " + id + " not found!");
@@ -50,7 +43,7 @@ namespace Api.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdatePlayer(int id, [FromBody]Player player)
         {
-            Player player2update = players.Find(p => p.Id == id);
+            Player? player2update = apiContext.Players.SingleOrDefault(p => p.Id == id);
             if (player2update == null)
             {
                 return NotFound("Player with id " + id + " not found!");
@@ -58,25 +51,27 @@ namespace Api.Controllers
             player2update.FirstName=player.FirstName;
             player2update.LastName=player.LastName;
             player2update.UserName=player.UserName;
+            apiContext.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeletePlayer(int id)
         {
-            Player player = players.Find(p => p.Id == id);
+            Player? player = apiContext.Players.SingleOrDefault(p => p.Id == id);
             if (player == null)
             {
                 return NotFound("Player with id " + id + " not found!");
             }
-            players.Remove(player);
+            apiContext.Players.Remove(player);
+            apiContext.SaveChanges();
             return Ok();
         }
 
         [HttpGet()]
         public ActionResult<List<Player>> GetAllPlayers()
         {
-            return players;
+            return apiContext.Players.ToList();
         }
     }
 }
