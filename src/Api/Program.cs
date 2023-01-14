@@ -1,3 +1,5 @@
+using Persistense;
+
 namespace Api
 {
     public class Program
@@ -9,6 +11,7 @@ namespace Api
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<ApiContext>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
