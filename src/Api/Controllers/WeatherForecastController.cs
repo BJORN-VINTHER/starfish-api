@@ -11,40 +11,11 @@ namespace Api.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        private static List<Player> players = new List<Player>() {
-            new Player
-            {
-                UserName = "Hansemand",
-                FirstName = "Hans",
-                LastName = "Jensen",
-                Id = 10,
-            },
-            new Player
-            {
-                UserName = "Jensemand",
-                FirstName = "Jens",
-                LastName = "Hansen",
-                Id = 20,
-            }};
+        
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-            //players = new List<Player>();
-            //players.Add(new Player
-            //{
-            //    UserName = "Hansemand",
-            //    FirstName = "Hans",
-            //    LastName = "Jensen",
-            //    Id = 10,
-            //});
-            //players.Add(new Player
-            //{
-            //    UserName = "Jensemand",
-            //    FirstName = "Jens",
-            //    LastName = "Hansen",
-            //    Id = 20,
-            //});
         }
 
         [HttpGet("test")]
@@ -75,29 +46,6 @@ namespace Api.Controllers
         public string Eccho(string fname, string lname)
         {
             return fname + " " + lname;
-        }
-
-        [HttpPost("players")]
-        public Player CreatePlayer(string uname, string fname, string lname)
-        {
-            Player player = new Player();
-            player.FirstName = fname;
-            player.LastName = lname;
-            player.UserName = uname;
-            player.Id = players.Count + 1;
-            players.Add(player);
-            return player;
-        }
-
-        [HttpGet("players/{id}")]
-        public ActionResult<Player> GetPlayer(int id)
-        {
-            Player player = players.Find(p => p.Id == id);
-            if (player == null)
-            {
-                return NotFound("Player with id " + id + " not found!");
-            }
-            return player;
         }
     }
 }
