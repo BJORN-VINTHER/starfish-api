@@ -16,6 +16,8 @@ namespace Application
 
         public override Task OnConnectedAsync()
         {
+            var httpContext = Context.GetHttpContext();
+            var codeValue = httpContext.Request.Query["code"].ToString();
             return base.OnConnectedAsync();
         }
 
