@@ -12,19 +12,16 @@ namespace Application
         public string UserName { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        //public int Id { get; set; }
+        public int Id { get; set; }
 
-        public PlayerDto()
-        {
-
-        }
+        public PlayerDto() { }
 
         public PlayerDto(Player player)
         {
             FirstName = player.FirstName;
             LastName = player.LastName;
             UserName = player.UserName;
-            //Id = player.Id;
+            Id = player.Id;
         }
     }
 }
