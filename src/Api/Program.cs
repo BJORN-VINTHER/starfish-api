@@ -12,10 +12,14 @@ namespace Api
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddDbContext<ApiContext>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSignalR();
+
+            // Custom dependency injections
+            builder.Services.AddScoped<IPlayerManager, PlayerManager>();
 
             var app = builder.Build();
 
