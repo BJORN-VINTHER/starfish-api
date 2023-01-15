@@ -1,3 +1,4 @@
+using Application;
 using Persistense;
 
 namespace Api
@@ -9,12 +10,12 @@ namespace Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services.AddDbContext<ApiContext>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
@@ -25,10 +26,8 @@ namespace Api
                 app.UseSwaggerUI();
             }
 
-            app.UseAuthorization();
-
-
             app.MapControllers();
+            app.MapHub<ChatHub>("/chat");
 
             app.Run();
         }
