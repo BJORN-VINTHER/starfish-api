@@ -29,11 +29,15 @@ namespace Application
 
         private int CreateId()
         {
-            int i = 1;
-            int id = apiContext.Players.Count() + i;
+            int count = 1;
+            int id = Math.Abs(Guid.NewGuid().GetHashCode());
             while (GetPlayer(id) != null)
             {
-                id = apiContext.Players.Count() + ++i;
+                if (count++ > apiContext.Players.Count() + 1)
+                {
+                    throw new Exception("Could not create unique id!");
+                }
+                id = Math.Abs(Guid.NewGuid().GetHashCode());
             }
             return id;
         }
