@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense;
+using Persistense.Entities;
 using System.Numerics;
 using System.Reflection.Emit;
 
@@ -11,17 +12,26 @@ namespace Api.Controllers
     [ApiController]
     public class PlayersController : ControllerBase
     {
+        // ----------------------------------------------------------------------------------------------------
+        // Private fields / properties
+        // ----------------------------------------------------------------------------------------------------
         private readonly IPlayerManager playerManager;
 
+        // ----------------------------------------------------------------------------------------------------
+        // Constructors
+        // ----------------------------------------------------------------------------------------------------
         public PlayersController(IPlayerManager playerManager)
         {
             this.playerManager = playerManager;
         }
 
+        // ----------------------------------------------------------------------------------------------------
+        // Public methods
+        // ----------------------------------------------------------------------------------------------------
         [HttpPost()]
-        public PlayerDto CreatePlayer(string uname, string fname, string lname)
+        public PlayerDto CreatePlayer(string userName, string firstName, string lastName)
         {
-            return new PlayerDto(playerManager.CreatePlayer(fname, lname, uname));
+            return new Application.PlayerDto(playerManager.CreatePlayer(userName, firstName, lastName));
         }
 
         [HttpGet("{id}")]
@@ -35,10 +45,29 @@ namespace Api.Controllers
             return new PlayerDto(player);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult UpdatePlayer(int id, [FromBody] Player input)
+        [HttpGet()]
+        public ActionResult<List<PlayerDto>> GetPlayers()
         {
-            Player? player = playerManager.UpdatePlayer(id, input);
+
+            //return playerManager.GetPlayers().Select(p => new PlayerDto(p)).ToList();
+            return playerManager.GetPlayers().ConvertAll(p => new PlayerDto(p));
+        }
+
+        //[HttpPut("{id}")]
+        //public ActionResult UpdatePlayer(int id, [FromBody] Player input)
+        //{
+        //    Player? player = playerManager.UpdatePlayer(id, input);
+        //    if (player == null)
+        //    {
+        //        return NotFound("Player with id " + id + " not found!");
+        //    }
+        //    return Ok();
+        //}
+
+        [HttpPut("{id}")]
+        public ActionResult UpdatePlayer(int id, string userName, string firstName, string lastName)
+        {
+            Player? player = playerManager.UpdatePlayer(id, userName, firstName, lastName);
             if (player == null)
             {
                 return NotFound("Player with id " + id + " not found!");
@@ -55,14 +84,6 @@ namespace Api.Controllers
                 return NotFound("Player with id " + id + " not found!");
             }
             return Ok();
-        }
-
-        [HttpGet()]
-        public ActionResult<List<PlayerDto>> GetPlayers()
-        {
-
-            //return playerManager.GetPlayers().Select(p => new PlayerDto(p)).ToList();
-            return playerManager.GetPlayers().ConvertAll(p => new PlayerDto(p));
         }
     }
 }
