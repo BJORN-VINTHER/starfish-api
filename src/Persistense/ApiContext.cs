@@ -1,5 +1,5 @@
-﻿using Api;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistense.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
