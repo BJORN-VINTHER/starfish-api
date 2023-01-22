@@ -2,6 +2,5 @@
 
 Developed by Carsten and Bjorn
 
-
-# Activities
+## Activities
 * [Chat](/docs/chat.md)
